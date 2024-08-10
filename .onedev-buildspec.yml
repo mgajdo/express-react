@@ -57,6 +57,7 @@ jobs:
   - !PullRepository
     name: pull
     remoteUrl: https://github.com/mgajdo/express-react
+    passwordSecret: github-access-token
     refs: main
     withLfs: false
     force: false
