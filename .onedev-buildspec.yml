@@ -56,7 +56,7 @@ jobs:
   steps:
   - !PullRepository
     name: pull
-    remoteUrl: https://guthub.com/mgajdo/express-react
+    remoteUrl: https://github.com/mgajdo/express-react
     refs: refs/heads/* refs/tags/*
     withLfs: false
     force: false
