@@ -61,6 +61,14 @@ jobs:
     withLfs: false
     force: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: proxy
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands: |
+        git config --global http.proxy http://localhost:6610
+    useTTY: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
