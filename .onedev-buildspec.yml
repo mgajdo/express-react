@@ -1,0 +1,93 @@
+version: 35
+jobs:
+- name: express ci
+  steps:
+  - !CheckoutStep
+    name: checkout code
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !GenerateChecksumStep
+    name: generate package checksum
+    files: package-lock.json
+    targetFile: checksum
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !SetupCacheStep
+    name: set up npm cache
+    key: node_modules_@file:checksum@
+    loadKeys:
+    - node_modules
+    paths:
+    - node_modules
+    uploadStrategy: UPLOAD_IF_NOT_HIT
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !SetBuildVersionStep
+    name: set build version
+    buildVersion: '@script:builtin:node:determine-project-version@'
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: build & test
+    runInContainer: true
+    image: node
+    interpreter: !DefaultInterpreter
+      commands: |
+        npm ci
+        npx echo "Error: no test specified" && exit 1
+        npm start
+    useTTY: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !BranchUpdateTrigger {}
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
+- name: react ci
+  steps:
+  - !CheckoutStep
+    name: checkout code
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !GenerateChecksumStep
+    name: generate package checksum
+    files: client/package-lock.json
+    targetFile: checksum
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !SetupCacheStep
+    name: set up npm cache
+    key: node_modules_@file:checksum@
+    loadKeys:
+    - node_modules
+    paths:
+    - node_modules
+    uploadStrategy: UPLOAD_IF_NOT_HIT
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !SetBuildVersionStep
+    name: set build version
+    buildVersion: '@script:builtin:node:determine-project-version@'
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: build & test
+    runInContainer: true
+    image: node
+    interpreter: !DefaultInterpreter
+      commands: |
+        npm install
+        export CI=TRUE
+        npm echo "Error: no test specified" && exit 1
+        npm cd client && npm install && npm run build
+    useTTY: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !BranchUpdateTrigger {}
+  jobDependencies:
+  - jobName: express ci
+    requireSuccessful: true
+    artifacts: '**'
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
