@@ -52,3 +52,17 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+- name: Pull from Github
+  steps:
+  - !PullRepository
+    name: pull
+    remoteUrl: https://guthub.com/mgajdo/express-react
+    passwordSecret: github-access-token
+    refs: refs/heads/* refs/tags/*
+    withLfs: false
+    force: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
