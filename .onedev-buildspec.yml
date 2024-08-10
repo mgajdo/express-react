@@ -60,7 +60,7 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands: |
-        git config --global http.proxy http://localhost:6610
+        git config --global http.proxy http://192.168.178.188:6610
     useTTY: true
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PullRepository
