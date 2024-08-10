@@ -43,8 +43,8 @@ jobs:
 - name: Push to Github
   steps:
   - !PushRepository
-    name: Push to Github
-    remoteUrl: https://github.com/mgjado/express-react
+    name: push
+    remoteUrl: https://github.com/mgajdo/express-react
     passwordSecret: github-access-token
     force: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
