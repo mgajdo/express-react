@@ -54,13 +54,6 @@ jobs:
   timeout: 3600
 - name: Pull from Github
   steps:
-  - !PullRepository
-    name: pull
-    remoteUrl: https://github.com/mgajdo/express-react
-    refs: main
-    withLfs: false
-    force: false
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
     name: proxy
     runInContainer: false
@@ -68,6 +61,13 @@ jobs:
       commands: |
         git config --global http.proxy http://localhost:6610
     useTTY: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !PullRepository
+    name: pull
+    remoteUrl: https://github.com/mgajdo/express-react
+    refs: main
+    withLfs: false
+    force: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
   maxRetries: 3
