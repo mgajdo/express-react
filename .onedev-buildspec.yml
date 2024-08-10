@@ -31,7 +31,7 @@ jobs:
     runInContainer: true
     image: node
     interpreter: !DefaultInterpreter
-      commands: "# If any command in the script fails, the script will stop executing further commands\nset -e\n\napt update\n# apt install -y jq\n\n# npm clean install\nnpm ci\nexport CI=true\n\n# start server at server/index.js\nnpm start\n\nnpm test\nnpx echo \"Error: no test specified\" && exit 1\n\n# start client at client/ \nnpm run build\n\n# parse and store package version into a file which \n# will be used later to tag docker image\n# jq -r '.version' package.json > version.txt\n"
+      commands: "# If any command in the script fails, the script will stop executing further commands\nset -e\n\napt update\n# apt install -y jq\n\n# npm clean install\nnpm ci\nexport CI=true\n\n# start server at server/index.js\nnpm start\n\nnpm test\nnpM echo \"Error: no test specified\" && exit 1\n\n# start client at client/ \nnpm run build\n\n# parse and store package version into a file which \n# will be used later to tag docker image\n# jq -r '.version' package.json > version.txt\n"
     useTTY: true
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
